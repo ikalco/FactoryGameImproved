@@ -40,6 +40,8 @@ class TerrainGenrator {
   }
 
   static #generateTile(x, y) {
+    // This is where terrain generation happens (kinda)
+
     return new Tile(x, y, 0)
     const v = noise((x - 10000) * TerrainGenrator.#noiseScale, (y - 10000) * TerrainGenrator.#noiseScale);
 
