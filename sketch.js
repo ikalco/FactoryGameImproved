@@ -11,15 +11,15 @@ function preload() {
 function setup() {
   createCanvas(1080, 720);
 
-  TerrainGeneration.setup();
+  TerrainGenrator.setup();
 
   camera = new Camera(0, 0);
 
   tileWidth = floor(width / tileSize);
   tileHeight = floor(height / tileSize);
 
-  world = new World("");
-  player = new Player(floor(tileWidth / 2) * tileSize, floor(tileHeight / 2) * tileSize);
+  world = new World(tileWidth, tileHeight);
+  player = new Player(floor((tileWidth) / 2) * tileSize, floor((tileHeight) / 2) * tileSize);
 }
 
 function draw() {
@@ -27,9 +27,9 @@ function draw() {
 
   player.update();
   camera.centerOnPlayer(player);
-  world.update();
+  world.chunkUpdate();
 
-  world.draw();
+  world.chunkDraw();
   player.draw();
 
   Debug.drawFramerate();
