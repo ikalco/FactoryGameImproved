@@ -16,24 +16,24 @@ class Player {
   static keysPressed = {};
 
   constructor(x, y) {
-    this.pos = createVector(x, y);
-    this.speed = 1;
-    print(this.speed)
+    this.x = x;
+    this.y = y;
+
+    this.speed = 5;
 
     this.color = color(random(0, 255), random(0, 255), random(0, 255));
   }
 
   update() {
-    if (Player.keysPressed.w) this.pos.y -= this.speed;
-    if (Player.keysPressed.s) this.pos.y += this.speed;
-    if (Player.keysPressed.a) this.pos.x -= this.speed;
-    if (Player.keysPressed.d) this.pos.x += this.speed;
+    if (Player.keysPressed.w) this.y -= this.speed;
+    if (Player.keysPressed.s) this.y += this.speed;
+    if (Player.keysPressed.a) this.x -= this.speed;
+    if (Player.keysPressed.d) this.x += this.speed;
   }
 
   draw() {
-    push();
     fill(this.color);
-    rect(parseInt(tileWidth / 2) * tileSize, parseInt(tileHeight / 2) * tileSize, tileSize, tileSize);
-    pop();
+    //rect(0, 0, tileSize, tileSize);
+    rect(floor(this.x - camera.getXOffset()), floor(this.y - camera.getYOffset()), tileSize, tileSize);
   }
 }
