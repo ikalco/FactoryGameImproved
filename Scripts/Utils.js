@@ -4,7 +4,7 @@ class Debug {
 
   static drawFramerate() {
     Debug.#avgFps = Debug.#decay * Debug.#avgFps + (1.0 - Debug.#decay) * getFrameRate();
-    let fpsString = "FPS: " + floor(Debug.#avgFps);
+    let fpsString = "FPS: " + Math.floor(Debug.#avgFps);
     push();
     textSize(24);
     fill(255);

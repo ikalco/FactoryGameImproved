@@ -1,5 +1,5 @@
 class TerrainGenrator {
-  static #noiseScale = 0.05
+  static #noiseScale = 0.05;
 
   static setup() {
     noiseDetail(5, 0.5);
@@ -32,7 +32,7 @@ class TerrainGenrator {
     for (let i = 0; i < Chunk.Size; i++) {
       chunkTiles[i] = [];
       for (let j = 0; j < Chunk.Size; j++) {
-        chunkTiles[i][j] = TerrainGenrator.#generateTile(i + (chunkX * Chunk.Size), j + (chunkY * Chunk.Size));
+        chunkTiles[i][j] = TerrainGenrator.#generateTile(i + chunkX * Chunk.Size, j + chunkY * Chunk.Size);
       }
     }
 
@@ -40,7 +40,7 @@ class TerrainGenrator {
   }
 
   static #generateTile(x, y) {
-    return new Tile(x, y, 0)
+    //return new Tile(x, y, 0)
     const v = noise((x - 10000) * TerrainGenrator.#noiseScale, (y - 10000) * TerrainGenrator.#noiseScale);
 
     // 0 = grass
@@ -49,7 +49,7 @@ class TerrainGenrator {
 
     if (v > 0.85) {
       return new Tile(x, y, 2);
-    } else if (v > 0.5) {
+    } else if (v > 0.7) {
       return new Tile(x, y, 1);
     } else if (v > 0) {
       return new Tile(x, y, 0);

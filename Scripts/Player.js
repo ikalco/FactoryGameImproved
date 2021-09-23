@@ -1,15 +1,15 @@
 function keyPressed() {
-  if (key == "w") Player.keysPressed.w = true;
-  if (key == "s") Player.keysPressed.s = true;
-  if (key == "a") Player.keysPressed.a = true;
-  if (key == "d") Player.keysPressed.d = true;
+  Player.keysPressed[keyCode] = true;
 }
 
 function keyReleased() {
-  if (key == "w") Player.keysPressed.w = false;
-  if (key == "s") Player.keysPressed.s = false;
-  if (key == "a") Player.keysPressed.a = false;
-  if (key == "d") Player.keysPressed.d = false;
+  Player.keysPressed[keyCode] = false;
+  console.log(keyCode);
+  if (keyCode == 82) {
+    if (World.placeAngle == 270) World.placeAngle = 0;
+    if (Player.keysPressed[16]) World.placeAngle -= HALF_PI;
+    else World.placeAngle += HALF_PI;
+  }
 }
 
 class Player {
@@ -21,19 +21,19 @@ class Player {
 
     this.speed = 5;
 
-    this.color = color(random(0, 255), random(0, 255), random(0, 255));
+    this.color = color(Math.random() * 255, Math.random() * 255, Math.random() * 255);
   }
 
   update() {
-    if (Player.keysPressed.w) this.y -= this.speed;
-    if (Player.keysPressed.s) this.y += this.speed;
-    if (Player.keysPressed.a) this.x -= this.speed;
-    if (Player.keysPressed.d) this.x += this.speed;
+    if (Player.keysPressed[87]) this.y -= this.speed;
+    if (Player.keysPressed[83]) this.y += this.speed;
+    if (Player.keysPressed[65]) this.x -= this.speed;
+    if (Player.keysPressed[68]) this.x += this.speed;
   }
 
   draw() {
     fill(this.color);
     //rect(0, 0, tileSize, tileSize);
-    rect(floor(this.x - camera.getXOffset()), floor(this.y - camera.getYOffset()), tileSize, tileSize);
+    rect(Math.floor(this.x - camera.getXOffset()), Math.floor(this.y - camera.getYOffset()), tileSize, tileSize);
   }
 }
