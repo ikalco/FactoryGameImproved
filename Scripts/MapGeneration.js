@@ -55,4 +55,21 @@ class TerrainGenrator {
       return new Tile(x, y, 0);
     }
   }
+
+  static generateTileType(x, y) {
+    //return new Tile(x, y, 0)
+    const v = noise((x - 10000) * TerrainGenrator.#noiseScale, (y - 10000) * TerrainGenrator.#noiseScale);
+
+    // 0 = grass
+    // 1 = sand
+    // 2 = water
+
+    if (v > 0.85) {
+      return 2;
+    } else if (v > 0.7) {
+      return 1;
+    } else if (v > 0) {
+      return 0;
+    }
+  }
 }

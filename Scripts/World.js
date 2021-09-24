@@ -1,5 +1,6 @@
 class World {
   static placeAngle = 0;
+  static canRotate = true;;
 
   #map = [];
   #width;
@@ -16,27 +17,7 @@ class World {
     this.#map = TerrainGenrator.generateChunkMap(this.#width, this.#height);
   }
 
-  update() {
-    let mouseWorldCords = World.realCordsToWorldCords(mouseX + camera.getXOffset(), mouseY + camera.getYOffset());
-
-    let chunkX = floor(mouseWorldCords.x / Chunk.Size);
-    let chunkY = floor(mouseWorldCords.y / Chunk.Size);
-
-    let worldX = floor(mouseWorldCords.x - chunkX * Chunk.Size);
-    let worldY = floor(mouseWorldCords.y - chunkY * Chunk.Size);
-
-    if (this.#map[chunkX]) {
-      if (this.#map[chunkX][chunkY]) {
-        this.#map[chunkX][chunkY].highlightTile(worldX, worldY);
-        if (mouseIsPressed) {
-          let clickedTile = this.#map[chunkX][chunkY].getTile(worldX, worldY);
-          if (clickedTile.machine == null) {
-            clickedTile.machine = new Conveyor(clickedTile);
-          }
-        }
-      }
-    }
-  }
+  update() { }
 
   draw() {
     // height and width are number of chunks that fit onto screen
@@ -59,6 +40,14 @@ class World {
         }
 
         this.#map[newX][newY].draw();
+      }
+    }
+  }
+
+  getChunk(chunkX, chunkY) {
+    if (this.#map[chunkX]) {
+      if (this.#map[chunkX][chunkY]) {
+        return this.#map[chunkX][chunkY];
       }
     }
   }

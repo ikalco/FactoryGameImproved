@@ -1,8 +1,14 @@
+/**
+ * @param  {} x
+ * @param  {} y
+ * @param  {} machineType
+ */
 class Machine {
-  constructor(x, y, machineType) {
-    this.worldX = x;
-    this.worldY = y;
-    this.tileType = machineType;
+  constructor(chunkX, chunkY, tile, machineType) {
+    this.chunkX = chunkX;
+    this.chunkY = chunkY;
+    this.tile = tile;
+    this.machineType = machineType;
 
     this.tileWidth = 1;
     this.tileHeight = 1;
@@ -22,37 +28,16 @@ class Machine {
     }
 
     this.drawAngle = World.placeAngle;
+
+    this.tile.tileType = this.machineType;
   }
 
   draw(x, y) {
-    push();
-    imageMode(CENTER);
-    translate(x + tileSize / 2, y + tileSize / 2);
-    //image(img, 0, 0, obj.w, obj.h);
-    rotate(this.drawAngle);
-    translate(-(x + tileSize / 2), -(y + tileSize / 2));
-    imageMode(CORNER);
-    image(Tile.Tiles[this.tileType], x, y, tileSize, tileSize);
-    pop();
-  }
-}
-
-class Conveyor extends Machine {
-  static Type = 0x100000;
-
-  #items = [];
-
-  constructor(tile) {
-    super(tile.x, tile.y, Conveyor.Type);
-
-    this.tileWidth = 1;
-    this.tileHeight = 1;
-
-    this.tile = tile;
-
-    this.tile.tileType = Conveyor.Type;
-    this.#items = [];
+    rotatedImage(Tile.Tiles[this.machineType], x, y, tileSize, tileSize, this.drawAngle);
   }
 
-  update() {}
+  delete() {
+    this.tile.tileType = TerrainGenrator.generateTileType(this.tile.x, this.tile.y);
+    this.tile.machine = null;
+  }
 }

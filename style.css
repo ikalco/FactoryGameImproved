@@ -1,3 +1,7 @@
+:root {
+  --itemSize: 48px;
+}
+
 html,
 body {
   margin: 0;
@@ -5,4 +9,36 @@ body {
 }
 canvas {
   display: block;
+}
+
+div#main_game_gui {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+div#inventory_hotbar {
+  background-color: rgb(35, 35, 35);
+  border-radius: 2px;
+  position: absolute;
+  padding: 0px 3px 0px 3px;
+  top: 90%;
+  text-align: center;
+}
+
+div.inventory_slot {
+  border-radius: 3px;
+  position: relative;
+  top: 2px;
+  background-color: rgb(50, 48, 49);
+  display: inline-block;
+  width: var(--itemSize);
+  height: var(--itemSize);
+}
+
+div.inventory_slot img {
+  width: calc(var(--itemSize) - 4px);
+  height: calc(var(--itemSize) - 4px);
+  border-radius: 5px;
+  padding: 2px;
 }

@@ -1,20 +1,25 @@
 let tileSize = 32;
 let tileWidth, tileHeight;
 let player, world, camera;
+let atlasImage;
 
 function preload() {
-  let grassImage = loadImage("./assets/GrassImage.jpeg");
-  let sandImage = loadImage("./assets/SandImage.jpeg");
-  let waterImage = loadImage("./assets/WaterImage.jpeg");
-  let conveyorImage = loadImage("./assets/ConveyorImage.png");
+  atlasImage = loadImage("./assets/atlas.png");
+}
+
+function setup() {
+  createCanvas(1080, 720);
+
+  // To be able to right click delete a block
+  document.addEventListener('contextmenu', event => event.preventDefault());
 
   // Terrain Tiles
-  grassImage.resize(tileSize, tileSize);
-  sandImage.resize(tileSize, tileSize);
-  waterImage.resize(tileSize, tileSize);
+  let grassImage = atlasImage.get(0, 0, 32, 32);
+  let sandImage = atlasImage.get(32, 0, 32, 32);
+  let waterImage = atlasImage.get(64, 0, 32, 32);
 
   // Machines
-  conveyorImage.resize(tileSize, tileSize);
+  let conveyorImage = atlasImage.get(96, 0, 32, 32);
 
   // Terrain Tiles
   Tile.Tiles[0x000000] = grassImage;
@@ -23,10 +28,6 @@ function preload() {
 
   // Machines
   Tile.Tiles[0x100000] = conveyorImage;
-}
-
-function setup() {
-  createCanvas(1080, 720);
 
   TerrainGenrator.setup();
 

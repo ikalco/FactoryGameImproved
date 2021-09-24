@@ -1,21 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="./Libraries/p5.min.js">Libraries</script>
     <link rel="stylesheet" type="text/css" href="./style.css" />
     <meta charset="utf-8" />
-  </head>
+    <script src="./Libraries/p5.min.js"></script>
 
-  <body>
     <script src="./Scripts/Utils.js"></script>
     <script src="./Scripts/Tile.js"></script>
-    <script src="Scripts/Machines/Conveyor.js"></script>
-    <script src="Scripts/Machines/Machine.js"></script>
+    <script src="./Scripts/Machines/Machine.js"></script>
+    <script src="./Scripts/Machines/Conveyor.js"></script>
     <script src="./Scripts/Chunk.js"></script>
     <script src="./Scripts/World.js"></script>
     <script src="./Scripts/Camera.js"></script>
+    <script src="./Scripts/Inventory.js"></script>
     <script src="./Scripts/Player.js"></script>
     <script src="./Scripts/MapGeneration.js"></script>
     <script src="./sketch.js"></script>
+  </head>
+
+  <body>
+    <div id="main_game_gui">
+      <div id="inventory_hotbar">
+        <div class="inventory_slot"><img src="assets/ConveyorImage.png" /></div>
+        <div class="inventory_slot"></div>
+        <div class="inventory_slot"></div>
+        <div class="inventory_slot"></div>
+        <div class="inventory_slot"></div>
+        <div class="inventory_slot"></div>
+        <div class="inventory_slot"></div>
+        <div class="inventory_slot"></div>
+        <div class="inventory_slot"></div>
+        <div class="inventory_slot"></div>
+      </div>
+    </div>
   </body>
 </html>
