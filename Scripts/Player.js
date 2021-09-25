@@ -13,6 +13,16 @@ function keyReleased() {
   if (keyCode == 82) {
     World.canRotate = true;
   }
+  if (keyCode >= 49 && keyCode <= 57) {
+    player.inventory.selectItem(keyCode - 49);
+    World.placeAngle = 0;
+  }
+  if (keyCode == 48) {
+    player.inventory.selectItem(9);
+  }
+  if (keyCode == 81) {
+    Inventory.canSelect = true;
+  }
 }
 
 class Player {

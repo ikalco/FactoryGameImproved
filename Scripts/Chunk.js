@@ -41,7 +41,7 @@ class Chunk {
   }
 
   highlightTile(x, y) {
-    this.#tiles[x][y].highlight = true;
+    if (this.#tiles[x] && this.#tiles[x][y]) this.#tiles[x][y].highlight = true;
   }
 
   getTile(x, y) {

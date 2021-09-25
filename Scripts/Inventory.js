@@ -1,102 +1,142 @@
-class InventorySlot {
-    constructor() {
-        this.specified = false;
+class Inventory {
+  static canSelect = true;
+
+  constructor(player) {
+    this.items = new Array(40);
+
+    for (let i = 0; i < this.items.length; i++) {
+      this.items[i] = new InventorySlot();
     }
 
-    addItems(numOfItems) {
-        if (!this.specified) return;
+    this.items[0].setItemType(Conveyor.MaxStackSize, Conveyor);
+    this.player = player;
 
-        console.log(this.numOfItems + numOfItems, this.itemType.MaxStackSize);
+    this.selectedItem = null;
+  }
 
-        if (this.numOfItems + numOfItems >= this.itemType.MaxStackSize) {
-            let extraNumOfItems = Math.abs(this.itemType.MaxStackSize - (this.numOfItems + numOfItems));
+  update() {
+    let mouseWorldCords = World.realCordsToWorldCords(mouseX + camera.getXOffset(), mouseY + camera.getYOffset());
 
-            this.numOfItems += numOfItems - extraNumOfItems;
+    let chunkX = Math.floor(mouseWorldCords.x / Chunk.Size);
+    let chunkY = Math.floor(mouseWorldCords.y / Chunk.Size);
 
-            return extraNumOfItems;
+    let worldX = Math.floor(mouseWorldCords.x - chunkX * Chunk.Size);
+    let worldY = Math.floor(mouseWorldCords.y - chunkY * Chunk.Size);
+
+    let chunk = world.getChunk(chunkX, chunkY);
+
+    if (chunk == undefined) return;
+
+    let clickedTile = chunk.getTile(worldX, worldY);
+    chunk.highlightTile(worldX, worldY);
+
+    if (Player.keysPressed[81] && Inventory.canSelect) {
+      if (this.selectedItem == null) {
+        if (clickedTile.machine != null) {
+          let containsItem = this.contains(clickedTile.machine);
+          if (containsItem != null) {
+            this.selectItem(containsItem);
+            World.placeAngle = clickedTile.machine.drawAngle;
+          }
         }
-
-        this.numOfItems += numOfItems;
-        return 0;
+      } else this.selectItem(null);
+      Inventory.canSelect = false;
     }
 
-    subtractItems(numOfItems) {
-        if (!this.specified) return;
-
-        if (this.numOfItems - numOfItems <= 0) return false;
-        this.numOfItems -= numOfItems;
-        return true;
-    }
-
-    setItemType(numOfItems, itemType) {
-        if (this.specified) return;
-
-        this.numOfItems = 0;
-        this.itemType = itemType;
-
-        this.specified = true;
-        if (this.addItems(numOfItems) > 0) throw console.error('ItemStackError: You can only create an item stack with a lower numOfItems given than maxStackSize');
-    }
-
-    getItemType() {
-        if (this.specified) {
-            return this.itemType;
+    if (mouseIsPressed && !mouseOverGui) {
+      if (mouseButton == LEFT) {
+        if (this.selectedItem != null) {
+          let selectedItemClass = this.items[this.selectedItem].getItemType();
+          if (clickedTile.machine == null || clickedTile.machine instanceof selectedItemClass) {
+            if (selectedItemClass) clickedTile.machine = new selectedItemClass(chunkX, chunkY, clickedTile);
+          }
         }
+      }
+      if (mouseButton == RIGHT) {
+        if (clickedTile.machine != null) {
+          clickedTile.machine.delete();
+          clickedTile.machine = null;
+        }
+      }
     }
+  }
+
+  draw() {
+    if (this.selectedItem != null) {
+      if (!this.items[this.selectedItem].getItemType()) return;
+      push();
+      tint(0, 150, 0);
+      rotatedImage(
+        Tile.Tiles[this.items[this.selectedItem].getItemType().Type],
+        mouseX - tileSize / 2,
+        mouseY - tileSize / 2,
+        tileSize,
+        tileSize,
+        World.placeAngle
+      );
+      pop();
+    }
+  }
+
+  selectItem(itemIndex) {
+    if (itemIndex == null) this.selectedItem = null;
+    if (this.items[itemIndex]) {
+      this.selectedItem = itemIndex;
+    }
+  }
+
+  contains(machine) {
+    for (let i = 0; i < this.items.length; i++) {
+      if (this.items[i].specified && machine instanceof this.items[i].itemType) return i;
+    }
+
+    return null;
+  }
 }
 
-class Inventory {
-    constructor(player) {
-        this.inventory = new Array(40);
+class InventorySlot {
+  constructor() {
+    this.specified = false;
+  }
 
-        for (let i = 0; i < this.inventory.length; i++) {
-            this.inventory[i] = new InventorySlot();
-        }
+  addItems(numOfItems) {
+    if (!this.specified) return;
 
-        this.inventory[0].setItemType(Conveyor.MaxStackSize, Conveyor);
-        this.player = player;
+    console.log(this.numOfItems + numOfItems, this.itemType.MaxStackSize);
 
-        this.selectedItem = 0;
+    if (this.numOfItems + numOfItems >= this.itemType.MaxStackSize) {
+      let extraNumOfItems = Math.abs(this.itemType.MaxStackSize - (this.numOfItems + numOfItems));
+
+      this.numOfItems += numOfItems - extraNumOfItems;
+
+      return extraNumOfItems;
     }
 
-    update() {
-        let mouseWorldCords = World.realCordsToWorldCords(mouseX + camera.getXOffset(), mouseY + camera.getYOffset());
+    this.numOfItems += numOfItems;
+    return 0;
+  }
 
-        let chunkX = floor(mouseWorldCords.x / Chunk.Size);
-        let chunkY = floor(mouseWorldCords.y / Chunk.Size);
+  subtractItems(numOfItems) {
+    if (!this.specified) return;
 
-        let worldX = floor(mouseWorldCords.x - chunkX * Chunk.Size);
-        let worldY = floor(mouseWorldCords.y - chunkY * Chunk.Size);
+    if (this.numOfItems - numOfItems <= 0) return false;
+    this.numOfItems -= numOfItems;
+    return true;
+  }
 
-        let chunk = world.getChunk(chunkX, chunkY);
+  setItemType(numOfItems, itemType) {
+    if (this.specified) return;
 
-        chunk.highlightTile(worldX, worldY);
-        if (Player.keysPressed[81]) this.selectedItem = null;
-        if (mouseIsPressed) {
-            let clickedTile = chunk.getTile(worldX, worldY);
-            if (mouseButton == LEFT) {
-                if (this.selectedItem != null) {
-                    let selectedItemClass = this.inventory[this.selectedItem].getItemType();
-                    if (clickedTile.machine == null || clickedTile.machine instanceof selectedItemClass) {
-                        clickedTile.machine = new selectedItemClass(chunkX, chunkY, clickedTile);
-                    }
-                }
-            }
-            if (mouseButton == RIGHT) {
-                if (clickedTile.machine != null) {
-                    clickedTile.machine.delete();
-                    clickedTile.machine = null;
-                }
-            }
-        }
+    this.numOfItems = 0;
+    this.itemType = itemType;
+
+    this.specified = true;
+    if (this.addItems(numOfItems) > 0) throw console.error("ItemStackError: You can only create an item stack with a lower numOfItems given than maxStackSize");
+  }
+
+  getItemType() {
+    if (this.specified) {
+      return this.itemType;
     }
-
-    draw() {
-        if (this.selectedItem != null) {
-            push();
-            tint(0, 150, 0);
-            rotatedImage(Tile.Tiles[this.inventory[this.selectedItem].getItemType().Type], mouseX - tileSize / 2, mouseY - tileSize / 2, tileSize, tileSize, World.placeAngle);
-            pop();
-        }
-    }
+  }
 }

@@ -1,5 +1,5 @@
 class Debug {
-  static #avgFps = 60;
+  static #avgFps = 0;
   static #decay = 0.9;
 
   static drawFramerate() {

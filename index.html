@@ -20,8 +20,8 @@
 
   <body>
     <div id="main_game_gui">
-      <div id="inventory_hotbar">
-        <div class="inventory_slot"><img src="assets/ConveyorImage.png" /></div>
+      <div id="inventory_hotbar" onpointerover="mouseOverGui = true;" onpointerleave="mouseOverGui = false;">
+        <div class="inventory_slot" onclick="player.inventory.selectItem(0); World.placeAngle = 0;"><img src="assets/ConveyorImage.png" /></div>
         <div class="inventory_slot"></div>
         <div class="inventory_slot"></div>
         <div class="inventory_slot"></div>

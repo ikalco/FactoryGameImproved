@@ -2,16 +2,17 @@ let tileSize = 32;
 let tileWidth, tileHeight;
 let player, world, camera;
 let atlasImage;
+let mouseOverGui = false;
 
 function preload() {
   atlasImage = loadImage("./assets/atlas.png");
 }
 
 function setup() {
-  createCanvas(1080, 720);
+  createCanvas(windowWidth, windowHeight);
 
   // To be able to right click delete a block
-  document.addEventListener('contextmenu', event => event.preventDefault());
+  document.addEventListener("contextmenu", (event) => event.preventDefault());
 
   // Terrain Tiles
   let grassImage = atlasImage.get(0, 0, 32, 32);
