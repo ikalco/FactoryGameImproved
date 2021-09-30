@@ -1,5 +1,3 @@
-let tileSize = 32;
-let tileWidth, tileHeight;
 let player, world, camera;
 let atlasImage;
 let mouseOverGui = false;
@@ -14,6 +12,9 @@ function setup() {
   // To be able to right click delete a block
   document.addEventListener("contextmenu", (event) => event.preventDefault());
 
+  Tile.Width = Math.floor(width / Tile.Size);
+  Tile.Height = Math.floor(height / Tile.Size);
+
   // Terrain Tiles
   let grassImage = atlasImage.get(0, 0, 32, 32);
   let sandImage = atlasImage.get(32, 0, 32, 32);
@@ -21,6 +22,9 @@ function setup() {
 
   // Machines
   let conveyorImage = atlasImage.get(96, 0, 32, 32);
+
+  // Items
+  let ironResourceItem = atlasImage.get(100, 100, Item.Size, Item.Size);
 
   // Terrain Tiles
   Tile.Tiles[0x000000] = grassImage;
@@ -30,15 +34,15 @@ function setup() {
   // Machines
   Tile.Tiles[0x100000] = conveyorImage;
 
+  // Items
+  Item.Items[0x000001] = ironResourceItem;
+
   TerrainGenrator.setup();
 
   camera = new Camera(0, 0);
 
-  tileWidth = Math.floor(width / tileSize);
-  tileHeight = Math.floor(height / tileSize);
-
-  world = new World(tileWidth, tileHeight);
-  player = new Player(Math.floor(tileWidth / 2) * tileSize, Math.floor(tileHeight / 2) * tileSize);
+  world = new World(Tile.Width, Tile.Height);
+  player = new Player(Math.floor(Tile.Width / 2) * Tile.Size, Math.floor(Tile.Height / 2) * Tile.Size);
 }
 
 function draw() {
@@ -46,9 +50,9 @@ function draw() {
 
   player.update();
   camera.centerOnPlayer(player);
+
   world.update();
 
-  world.draw();
   player.draw();
 
   Debug.drawFramerate();

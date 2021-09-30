@@ -1,9 +1,9 @@
 function keyPressed() {
   Player.keysPressed[keyCode] = true;
   if (keyCode == 82 && World.canRotate) {
-    if (World.placeAngle == 270) World.placeAngle = 0;
-    if (Player.keysPressed[16]) World.placeAngle -= HALF_PI;
-    else World.placeAngle += HALF_PI;
+    if (World.placeAngle == 270) World.resetPlaceRotation();
+    if (Player.keysPressed[16]) World.rotateLeft();
+    else World.rotateRight();
     World.canRotate = false;
   }
 }
@@ -15,7 +15,7 @@ function keyReleased() {
   }
   if (keyCode >= 49 && keyCode <= 57) {
     player.inventory.selectItem(keyCode - 49);
-    World.placeAngle = 0;
+    World.resetPlaceRotation();
   }
   if (keyCode == 48) {
     player.inventory.selectItem(9);
@@ -49,8 +49,7 @@ class Player {
 
   draw() {
     fill(this.color);
-    //rect(0, 0, tileSize, tileSize);
-    rect(Math.floor(this.x - camera.getXOffset()), Math.floor(this.y - camera.getYOffset()), tileSize, tileSize);
+    rect(Math.floor(this.x - camera.getXOffset()), Math.floor(this.y - camera.getYOffset()), Tile.Size, Tile.Size);
     this.inventory.draw();
   }
 }

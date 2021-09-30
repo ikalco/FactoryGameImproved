@@ -17,7 +17,6 @@ function rotatedImage(img, x, y, w, h, angle) {
   push();
   imageMode(CENTER);
   translate(x + w / 2, y + h / 2);
-  //image(img, 0, 0, obj.w, obj.h);
   rotate(angle);
   translate(-(x + w / 2), -(y + h / 2));
   imageMode(CORNER);

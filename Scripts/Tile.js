@@ -1,5 +1,8 @@
 class Tile {
   static Tiles = [];
+  static Size = 32;
+  static Width = 0;
+  static Height = 0;
 
   constructor(x, y, tileType) {
     this.x = x;
@@ -11,11 +14,11 @@ class Tile {
     this.machine = null;
   }
 
-  draw(x, y) {
+  draw() {
     if (this.machine == null) {
-      image(Tile.Tiles[this.tileType], x, y, tileSize, tileSize);
+      image(Tile.Tiles[this.tileType], this.x, this.y, Tile.Size, Tile.Size);
     } else {
-      this.machine.draw(x, y);
+      this.machine.draw(this.x, this.y);
     }
 
     if (this.highlight) {
@@ -24,7 +27,7 @@ class Tile {
       noFill();
       strokeWeight(2);
       stroke(255);
-      rect(x, y, tileSize, tileSize);
+      rect(this.x, this.y, Tile.Size, Tile.Size);
       this.highlight = false;
       pop();
     }

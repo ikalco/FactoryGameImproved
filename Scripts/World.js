@@ -1,27 +1,22 @@
 class World {
   static placeAngle = 0;
-  static canRotate = true;;
+  static placeDirection = { x: 0, y: -1 };
+  static canRotate = true;
 
   #map = [];
   #width;
   #height;
 
   constructor(maxTileWidth, maxTileHeight) {
-    //this.#width = tileWidth;
-    //this.#height = tileHeight;
-
-    //this.#map = TerrainGenrator.generateMap(this.#width, this.#height);
     this.#width = Math.ceil(maxTileWidth / Chunk.Size);
     this.#height = Math.ceil(maxTileHeight / Chunk.Size);
 
     this.#map = TerrainGenrator.generateChunkMap(this.#width, this.#height);
   }
 
-  update() { }
-
-  draw() {
+  update() {
     // height and width are number of chunks that fit onto screen
-    let chunkTileSize = tileSize * Chunk.Size;
+    let chunkTileSize = Tile.Size * Chunk.Size;
     let xOffset = Math.ceil(camera.getXOffset() / chunkTileSize);
     let yOffset = Math.ceil(camera.getYOffset() / chunkTileSize);
 
@@ -39,7 +34,7 @@ class World {
           this.#map[newX][newY] = TerrainGenrator.generateChunk(newX, newY);
         }
 
-        this.#map[newX][newY].draw();
+        this.#map[newX][newY].update();
       }
     }
   }
@@ -60,14 +55,46 @@ class World {
   }
 
   static worldCordsToRealCords(x, y) {
-    return createVector(x * tileSize, y * tileSize);
+    return createVector(x * Tile.Size, y * Tile.Size);
   }
 
   static realCordsToWorldCords(x, y) {
-    return createVector(Math.floor(x / tileSize), Math.floor(y / tileSize));
+    return createVector(Math.floor(x / Tile.Size), Math.floor(y / Tile.Size));
   }
 
   static realCordsToWorldChunkCords(x, y) {
-    return createVector(Math.floor(x / tileSize / Chunk.Size), Math.floor(y / tileSize / Chunk.Size));
+    return createVector(Math.floor(x / Tile.Size / Chunk.Size), Math.floor(y / Tile.Size / Chunk.Size));
+  }
+
+  static resetPlaceRotation() {
+    World.placeAngle = 0;
+    World.placeDirection = { x: 0, y: -1 };
+  }
+
+  static rotateLeft() {
+    World.placeAngle -= HALF_PI;
+    console.log("a");
+    if (World.placeAngle == 0) {
+      World.placeDirection = { x: 0, y: -1 };
+    } else if (World.placeAngle == 90) {
+      World.placeDirection = { x: 1, y: 0 };
+    } else if (World.placeAngle == 180) {
+      World.placeDirection = { x: 0, y: 1 };
+    } else if (World.placeAngle == 270) {
+      World.placeDirection = { x: -1, y: 0 };
+    }
+  }
+
+  static rotateRight() {
+    World.placeAngle += HALF_PI;
+    if (World.placeAngle == 0) {
+      World.placeDirection = { x: 0, y: -1 };
+    } else if (World.placeAngle == 90) {
+      World.placeDirection = { x: 1, y: 0 };
+    } else if (World.placeAngle == 180) {
+      World.placeDirection = { x: 0, y: 1 };
+    } else if (World.placeAngle == 270) {
+      World.placeDirection = { x: -1, y: 0 };
+    }
   }
 }

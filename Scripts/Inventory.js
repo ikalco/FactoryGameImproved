@@ -1,5 +1,6 @@
 class Inventory {
   static canSelect = true;
+  static lastPlaced;
 
   constructor(player) {
     this.items = new Array(40);
@@ -37,6 +38,7 @@ class Inventory {
           if (containsItem != null) {
             this.selectItem(containsItem);
             World.placeAngle = clickedTile.machine.drawAngle;
+            World.placeDirection = clickedTile.machine.direction;
           }
         }
       } else this.selectItem(null);
@@ -45,10 +47,15 @@ class Inventory {
 
     if (mouseIsPressed && !mouseOverGui) {
       if (mouseButton == LEFT) {
-        if (this.selectedItem != null) {
-          let selectedItemClass = this.items[this.selectedItem].getItemType();
-          if (clickedTile.machine == null || clickedTile.machine instanceof selectedItemClass) {
-            if (selectedItemClass) clickedTile.machine = new selectedItemClass(chunkX, chunkY, clickedTile);
+        if (Inventory.lastPlaced != clickedTile) {
+          if (this.selectedItem != null) {
+            let selectedItemClass = this.items[this.selectedItem].getItemType();
+            if (clickedTile.machine == null || clickedTile.machine instanceof selectedItemClass) {
+              if (selectedItemClass) {
+                clickedTile.machine = new selectedItemClass(chunkX, chunkY, clickedTile);
+                Inventory.lastPlaced = clickedTile;
+              }
+            }
           }
         }
       }
@@ -68,10 +75,10 @@ class Inventory {
       tint(0, 150, 0);
       rotatedImage(
         Tile.Tiles[this.items[this.selectedItem].getItemType().Type],
-        mouseX - tileSize / 2,
-        mouseY - tileSize / 2,
-        tileSize,
-        tileSize,
+        mouseX - Tile.Size / 2,
+        mouseY - Tile.Size / 2,
+        Tile.Size,
+        Tile.Size,
         World.placeAngle
       );
       pop();

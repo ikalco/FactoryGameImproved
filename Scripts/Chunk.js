@@ -1,5 +1,6 @@
 class Chunk {
   static Size = 16;
+  static DrawBorders = true;
 
   #tiles = [];
   #x;
@@ -13,29 +14,32 @@ class Chunk {
     else this.#tiles = tiles;
   }
 
-  draw() {
+  update() {
     let xOffset = this.#x * Chunk.Size;
     let yOffset = this.#y * Chunk.Size;
 
     for (let y = 0; y < Chunk.Size; y++) {
       for (let x = 0; x < Chunk.Size; x++) {
-        // prettier-ignore
-        if (this.#tiles[x][y])
-          this.#tiles[x][y].draw(
-            Math.floor((x + xOffset) * tileSize - camera.getXOffset()),
-            Math.floor((y + yOffset) * tileSize - camera.getYOffset())
-          );
+        if (this.#tiles[x][y]) {
+          let tile = this.#tiles[x][y];
+          tile.x = Math.floor((x + xOffset) * Tile.Size - camera.getXOffset());
+          tile.y = Math.floor((y + yOffset) * Tile.Size - camera.getYOffset());
+
+          tile.draw();
+        }
       }
     }
 
+    // draw chunk borders
+    if (!Chunk.DrawBorders) return;
     push();
     noFill();
     stroke(255, 0, 0);
     rect(
-      this.#x * Chunk.Size * tileSize - camera.getXOffset(),
-      this.#y * Chunk.Size * tileSize - camera.getYOffset(),
-      Chunk.Size * tileSize,
-      Chunk.Size * tileSize
+      this.#x * Chunk.Size * Tile.Size - camera.getXOffset(),
+      this.#y * Chunk.Size * Tile.Size - camera.getYOffset(),
+      Chunk.Size * Tile.Size,
+      Chunk.Size * Tile.Size
     );
     pop();
   }

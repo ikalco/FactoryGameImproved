@@ -1,6 +1,7 @@
 /**
  * @param  {} x
  * @param  {} y
+ * @param  {} tile
  * @param  {} machineType
  */
 class Machine {
@@ -15,7 +16,7 @@ class Machine {
 
     this.highlight = false;
 
-    this.direction = Machine.placeDirection;
+    this.direction = World.placeDirection;
 
     if (World.placeAngle == 0) {
       this.direction = createVector(0, -1);
@@ -33,7 +34,7 @@ class Machine {
   }
 
   draw(x, y) {
-    rotatedImage(Tile.Tiles[this.machineType], x, y, tileSize, tileSize, this.drawAngle);
+    rotatedImage(Tile.Tiles[this.machineType], x, y, Tile.Size, Tile.Size, this.drawAngle);
   }
 
   delete() {
