@@ -21,12 +21,12 @@ div#main_game_gui {
 div#inventory_hotbar {
   background-color: rgb(35, 35, 35);
   border-radius: 2px;
-  position: absolute;
   padding: 0px 3px 0px 3px;
-  top: 90%;
   user-select: none;
   text-align: center;
-  left: 25%;
+  position: absolute;
+  top: 90%;
+  left: calc(50% - calc(var(--itemSize) * 5.5));
 }
 
 div.inventory_slot {
